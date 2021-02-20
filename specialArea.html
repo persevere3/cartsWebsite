@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>specialArea</title>
+    <link rel="stylesheet" href="css/specialArea.css">
+
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.0/css/font-awesome.css'/>
+
+    <!-- https://www.naturefruittw.com/ -->
+</head>
+<body>
+  <div class="specialArea" id="app" ref="body" :class="{is_scrollTop: window_scrollTop > 100}">
+    <div class="scrollto_top" @click="scrollTo(0)" :class="{is_show: window_scrollTop > 100}">
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </div>
+
+    <div class="sidebar_container" :class="{sidebar_active : is_sidebar}">
+      <div class="sidebar" :class="{sidebar_slideout : is_slideout}">
+        <div class="navbar">
+          <ul>
+            <li @click="routerPush('/index.html')"><div class="text">首頁</div></li>
+            <li @click="routerPush('/allProducts.html')">
+              <div class="text">
+                商品列表
+                <i class="fa fa-angle-down" :class="{i_active: is_productList}" @click.stop="is_productList = !is_productList" aria-hidden="true"></i>
+              </div>
+              <ul :class="{ul_active: is_productList}">
+                <li>
+                  所有商品
+                </li>
+                <li v-for="item in category_nav" :key="item.id" @click.stop="routerPush(`/category1.html?id=${item.id}`)">
+                  {{item.name}}
+                </li>
+              </ul>
+            </li>
+            <li @click="routerPush('/specialArea.html')">
+              <div class="text">專區</div>
+            </li>
+            <li @click="routerPush('/shopping.html?id=0')">
+              <div class="text">
+                貼心購物
+                <i class="fa fa-angle-down" :class="{i_active: is_shopping}" @click.stop="is_shopping = !is_shopping" aria-hidden="true"></i>
+              </div>
+              <ul :class="{ul_active: is_shopping}">
+                <li v-for="item in shopping_nav" :key="item.id" @click.stop="routerPush(`/shopping.html?id=${item.id}`)">
+                  {{item.name}}
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="other">
+          <div class="text">其他</div>
+          <ul>
+            <li @click="is_sidebar = 0; is_slideout = 0;; is_connect = 1">
+              聯絡我們
+                <i class="fa fa-comment" aria-hidden="true"></i>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="search_container" :class="{search_active : is_search}">
+      <div class="search">
+        <i class="fa fa-search" aria-hidden="true" @click="searchHandler"></i>
+        <input type="text" maxlength="100" placeholder="找商品" v-model="searchStr">
+      </div>
+    </div>
+
+    <div class="connect_container" :class="{connect_active : is_connect}">
+      <div class="connect">
+        <div class="text">聯絡我們</div>
+        <input placeholder="輸入你的電子信箱" type="email" value="">
+        <textarea rows="5" placeholder="輸入你的訊息。若是詢問店內特定商品，請留下商品名稱，也歡迎你留下電子信箱以外的聯絡方式，謝謝！"></textarea>
+        <div class="connect_button_container">
+          <div class="connect_button">發送</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="header" :class="{is_scrollTop: window_scrollTop > 100}">
+      <div class="widthContainer">
+        <div class="iconbar">
+          <ul>
+            <!-- <li>
+              <i class="fa fa-globe" aria-hidden="true"></i>
+              <i class="fa fa-angle-down" aria-hidden="true"></i>
+            </li> -->
+            <li class="search_button">
+              <input type="text" maxlength="100" placeholder="找商品" v-model="searchStr">
+              <i class="fa fa-search" aria-hidden="true" @click="searchHandler"></i>
+            </li>
+            <li class="connect_button" @click="is_connect = 1">
+              <i class="fa fa-comment" aria-hidden="true"></i>
+            </li>
+            <!-- <li>
+              <i class="fa fa-user" aria-hidden="true"></i>
+            </li> -->
+            <!-- <li>
+              <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+            </li> -->
+          </ul>
+          <div class='navbar_button' @click="click_navbar_button" :class="{is_background: window_scrollTop > 100}">
+            <i class="fa fa-th-list" aria-hidden="true"></i>
+          </div>
+        </div>
+  
+        <div class="logo" @click="routerPush('/index.html')">
+          <img src="img/logo.png" alt="">
+        </div>
+  
+        <div class="navbar">
+          <ul>
+            <li @click="routerPush('/index.html')">
+              首頁
+            </li>
+            <li @click="routerPush('/allProducts.html')">
+              商品列表
+              <i class="fa fa-angle-down" aria-hidden="true"></i>
+              <ul>
+                <li>
+                </li>
+                <li>
+                  所有商品
+                </li>
+                <li v-for="item in category_nav" :key="item.id" @click.stop="routerPush(`/category1.html?id=${item.id}`)">
+                  {{item.name}}
+                </li>
+              </ul>
+            </li>
+            <li @click="routerPush('/specialArea.html')">
+              專區
+            </li>
+            <li @click="routerPush('/shopping.html?id=0')">
+              貼心購物
+              <i class="fa fa-angle-down" aria-hidden="true"></i>
+              <ul>
+                <li>
+                </li>
+                <li v-for="item in shopping_nav" :key="item.id" @click.stop="routerPush(`/shopping.html?id=${item.id}`)">
+                  {{item.name}}
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="img_container" v-for="(item, index) in banner" :key="index" :style="{backgroundImage: `url(${item})`}"></div>
+
+    <div class="category_container">
+      <div class="product">
+        <div class="pic" :style="{backgroundImage: `url(${product[category_id][product_index]})`}"></div>
+        <div class="info">
+          <div class="name">【淡果香】暖薑金桔限定組(10包) </div>
+          <div class="discount_price"> NT450 </div>
+          <div class="origin_price"> NT490 </div>
+        </div>
+      </div>
+      <div class="pic_container">
+        <div class="pic" :style="{backgroundImage: `url(${category_pic})`}"></div>
+        <p> &nbsp; </p>
+        <p> ▲ 環保自用牛皮紙盒包裝 </p>
+      </div>
+
+      <div class="content">
+        <div class="title">
+          <p>
+            <span style="color:#ba6161;">首選推薦</span>〈 好孕媽咪組 〉
+          </p>
+        </div>
+        <div class="text">
+          <div class="strong">
+            <p>為懷孕的媽咪搭配好最合適的口味，</p>
+            <p>希望能為您分擔孕期喝不下水的煩惱。</p>
+          </div>
+          <div class="normal">
+            <p class="height21"> &nbsp; </p>
+            <p>因孕媽咪需<span style="color:#ba6161;">避開花草成分</span>，此組合特地挑選純水果的口味，並搭配<span style="color:#ba6161;">無咖啡因</span>的南非國寶茶。</p>
+            <p>內容物｜藍莓+草莓+蔓越莓口味 (10包)</p>
+            <p>百香果＋蘋果＋奇異果口味 (10包)</p>
+            <p>鳳梨＋柳橙口味 (10包)</p>
+            <p>南非國寶茶 (1罐/25包)</p>
+            <p class="height21"> &nbsp; </p>
+            <p>包裝｜環保自用牛皮紙盒</p>
+            <p>內含30包果乾 + 1罐南非國寶茶</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="category_name_container">
+      <div class="title">
+        <p>
+          〈 純水果口味果乾水 〉
+        </p>
+      </div>
+      <div class="text">
+        <ul>
+          <li>只要對裡面的水果成分不會過敏，都可以選擇。</li>
+          <li>〈缺水搶救自選環保組(20包)〉只可以備註選擇鳳梨＋柳橙口味，其餘口味皆有花草成分，孕婦請盡量避免！</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="products">
+      <div class="product_list">
+        <ul>
+          <li v-for="n in 6">
+            <div class="pic"></div>
+            <div class="info">
+              <div class="name">【淡果香】暖薑金桔限定組(10包) </div>
+              <div class="discount_price"> NT450 </div>
+              <div class="origin_price"> NT490 </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div> -->
+
+    <div class="category_name_container">
+      <div class="title">
+        <p>〈 無添加果乾系列 〉</p>
+      </div>
+      <div class="text">
+        <ul>
+          <li>無添加防腐劑、色素等物質，想來點比較沒負擔的小零嘴，這個最適合。</li>
+          <li>請務必避開自己會過敏的水果口味！</li>
+          <li>愛文芒果、火龍果、鳳梨，三種口味皆無添加糖。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="products2">
+      <div class="product_list">
+        <ul>
+          <li v-for="(item, index) in product[category_id]" :key="index" v-show="product_page_active * perpage_num - perpage_num - 1 < index && index < product_page_active * perpage_num">
+            <div class="pic" :style="{backgroundImage: `url(${item})`}">
+            </div>
+            <div class="info">
+              <div class="name">【淡果香】暖薑金桔限定組(10包) </div>
+              <div class="discount_price"> NT450 </div>
+              <div class="origin_price"> NT490 </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="product_page">
+        <ul>
+          <li @click="pagePush(product_page_active - 1)" :class="{opacity0: product_page_active < 2}"> <i class="fa fa-angle-double-left" aria-hidden="true"></i> </li>
+          <li v-for="item in totalpage_num" :class="{li_active: product_page_active === item}" 
+              @click="pagePush(item)">
+            {{item}}
+          </li>
+          <li @click="pagePush(product_page_active + 1)" :class="{opacity0: product_page_active > totalpage_num - 1}"> <i class="fa fa-angle-double-right" aria-hidden="true"></i> </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="link_list">
+        <ul>
+          <li>
+            <div class="title">關於我們</div>
+            <ul class="link">
+              <li @click="routerPush('/about.html')">
+                品牌故事  About us
+              </li>
+              <li @click="routerPush('/physicalStore.html')">
+                寄賣資訊  Store-info
+              </li>
+              <li @click="routerPush('/media.html')">
+                媒體推薦  Recommend
+              </li>
+              <li @click="routerPush('/differentIndustry.html')">
+                異業合作  Cooperation
+              </li>
+            </ul>
+          </li>
+          <li>
+            <div class="title link">顧客服務</div>
+            <ul class="link">
+              <li @click="routerPush('/shopping.html?id=1')">
+                常見問題  FAQ
+              </li>
+              <li @click="routerPush('/shopping.html?id=2')">
+                如何購買  How to buy
+              </li>
+              <li @click="routerPush('/shopping.html?id=3')">
+                條款與細則  Terms & Conditions
+              </li>
+              <li @click="routerPush('/shopping.html?id=4')">
+                售後服務  After-sales service
+              </li>
+            </ul>
+          </li>
+          <li>  
+            <div class="title">聯絡我們</div>     	 
+            <ul>
+              <li>
+                客服電話｜(02) 8626-3683
+              </li>
+              <li>
+                客服信箱｜tw@naturefruittw.com
+              </li>
+              <li>
+                服務時間｜（一）至（五）9:00~12:00 / 13:00~18:00
+              </li>
+              <li>
+                <ul>
+                  <li>
+                    <img src="img/fb.png" alt="">
+                  </li>
+                  <li>
+                    <img src="img/line.png" alt="">
+                  </li>
+                  <li>
+                    <img src="img/ig.png" alt="">
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="copyright"> Copyright © 2020 淡果香 From Nature </div> 
+      <div class="credit_list">
+        <ul>
+          <li>
+            <img src="img/card_tw_711_pay.png" alt="">
+          </li>
+          <li>
+            <img src="img/card_visa.png" alt="">
+          </li>
+          <li>
+            <img src="img/card_master.png" alt="">
+          </li>
+          <li>
+            <img src="img/card_paypal.png" alt="">
+          </li>
+          <li>
+            <img src="img/card_unionpay.png" alt="">
+          </li>
+          <li>
+            <img src="img/card_ecpay.png" alt="">
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<script>
+  let app = new Vue({
+    el: '#app',
+    data: {
+
+      // nav
+      category_nav: [
+        {
+          id: 1,
+          name: '果乾水',
+        },
+        {
+          id: 2,
+          name: '食用果乾',
+        },
+        {
+          id: 3,
+          name: '清香果醋',
+        },
+        {
+          id: 4,
+          name: '絕搭茶飲',
+        },
+      ],
+      shopping_nav: [
+        {
+          id: 1,
+          name: '常見問題',
+        },
+        {
+          id: 2,
+          name: '購物流程',
+        },
+        {
+          id: 3,
+          name: '退換貨政策',
+        },
+        {
+          id: 4,
+          name: '聯絡我們',
+        },
+      ],
+
+      // pic
+      banner: [
+        'img/carousel_1.png',
+      ],
+
+      product: {
+        1: [
+          'img/product_1-1.png',
+          'img/product_1-1.png',
+          'img/product_1-1.png',
+          'img/product_1-1.png',
+        ],
+        2: [
+          'img/product_2-1.png',
+          'img/product_2-1.png',
+          'img/product_2-1.png',
+          'img/product_2-1.png',
+          'img/product_2-1.png',
+          'img/product_2-1.png',
+        ],
+        3: [
+          'img/product_3-1.png',
+          'img/product_3-1.png',
+          'img/product_3-1.png',
+        ],
+        4: [
+          'img/product_4-1.png',
+          'img/product_4-1.png',
+        ],
+      },
+      category_id: 2,
+      product_index: 0,
+
+      category_pic: 'img/category_pic.png',
+
+      // scroll
+      window_scrollTop: 0,
+
+      // page
+      product_page_active: 1,
+      perpage_num: 4,
+      totalpage_num: 0,
+
+      // sidebar
+      is_sidebar: 0,
+      is_slideout: 0,
+
+      is_shopping: 0,
+      is_productList: 0,
+
+      // connect
+      is_connect: 0,
+
+      // search
+      is_search: 0,
+      searchStr: '',
+    }, 
+    methods: {
+      scrollHandler(){
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        this.window_scrollTop = scrollTop;
+      },
+      scrollTo(targetOffsetTop) {
+        let scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+        let step = 50;
+
+        function move(){
+          if (scrollTop > targetOffsetTop) {
+            scrollTop = scrollTop - step < targetOffsetTop ? targetOffsetTop : scrollTop - step ;
+          }
+          else if(scrollTop < targetOffsetTop) {
+            scrollTop = scrollTop + step > targetOffsetTop ? targetOffsetTop : scrollTop + step ;
+          }
+          else {
+            clearInterval(interval);
+          }
+          document.body.scrollTop = scrollTop;
+          document.documentElement.scrollTop = scrollTop;
+        }
+        let interval = setInterval(move, 10);
+      },
+      resizeHandler(){
+        this.is_search = 0;
+        this.searchStr = '';
+      },
+    
+      click_navbar_button(){
+        const vm = this;
+        vm.is_sidebar = 1;
+        setTimeout(function(){
+          vm.is_slideout = 1;
+        }, 100)
+      },
+
+      routerPush(url){
+        if('/cartsWebsite' + url == location.pathname + location.search){
+          return
+        }
+        window.open('/cartsWebsite' + url);
+      },
+      searchHandler(){
+        if(!this.searchStr){
+          this.is_search = 1;
+        }
+        else{
+          this.is_search = 0;
+          this.searchStr = '';
+        }
+      },
+
+      pagePush(page){
+        if(page > this.totalpage_num || page < 1){
+          return;
+        }
+        this.product_page_active = page;
+      }
+    },
+    created(){
+      this.totalpage_num = Math.ceil(this.product[this.category_id].length / this.perpage_num);
+    },
+    mounted(){
+      const vm = this;
+      window.addEventListener('scroll', this.scrollHandler);
+      window.addEventListener('resize', this.resizeHandler);
+
+      document.querySelector('.sidebar_container').addEventListener('click', function(e){
+        if(e.target.className.indexOf('sidebar_container')>-1){
+          vm.is_slideout = 0;
+          setTimeout(function(){
+            vm.is_sidebar = 0;
+          }, 350)
+        }
+      })
+      document.querySelector('.connect_container').addEventListener('click', function(e){
+        if(e.target.className.indexOf('connect_container')>-1){
+          vm.is_connect = 0;
+        }
+      })
+      document.querySelector('.search_container').addEventListener('click', function(e){
+        if(e.target.className.indexOf('search_container')>-1){
+          vm.is_search = 0;
+          vm.searchStr = '';
+        }
+      })
+    }
+  })
+</script>
+</body>
+</html>
