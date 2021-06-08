@@ -581,7 +581,56 @@
           return;
         }
         this.product_page_active = page;
-      }
+      },
+
+      getCustomerService(){
+       
+
+        let text = `
+          &lt;!-- Global site tag (gtag.js) - Google Analytics --&gt;
+          &lt;script async src="https://www.googletagmanager.com/gtag/js?id=UA-199012148-1"&gt;&lt;/script&gt;
+          &lt;script&gt;
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-199012148-1');
+          &lt;/script&gt;
+        `
+
+        // 
+        let script_arr = [];
+
+        let scriptItems = text.split('&lt;script');
+        scriptItems.splice(0, 1);
+
+        for(let i = 0; i < scriptItems.length; i++){
+          scriptItems[i] = '&lt;script '+ scriptItems[i].trim();
+          let attr = scriptItems[i].split('&gt;')[0];
+
+          let content = scriptItems[i].split('&gt;')[1].split("&lt;/script")[0];
+          let arr = attr.split(" ");
+          let obj = {};
+          for(let i = 0; i < arr.length; i++){
+            if(arr[i].indexOf('="') != -1){
+              obj[arr[i].split('="')[0]] = arr[i].split('="')[1].split('"')[0];
+            } 
+          }
+
+          let script = document.createElement('script');
+          for(let item in obj){
+            script.setAttribute(item, obj[item]);
+          }
+          script.textContent = content;
+
+          script_arr.push(script);
+        }
+        // 
+        let tag = 'head';
+        for(let i = 0; i < script_arr.length; i++){
+          document.querySelector(tag).appendChild(script_arr[i])
+        }
+      },
     
     },
     created(){
@@ -611,6 +660,7 @@
           vm.searchStr = '';
         }
       })
+      vm.getCustomerService();
     }
   })
 </script>
